@@ -52,23 +52,28 @@ def draw_board(board) -> str:
 # Game Logic
 
 def legal_move(user_move, user_row, user_col, board):
-    pass 
-
+    row = int(user_row)
+    col = board[0].index("  " + user_col.upper() + "  ")
+    if row < 0 or row >= len(board) - 1 or col not in board[0]:
+        # return false and print out a message saying invalid move
+            # if ' X ' or ' O ' in board[row][col]:
+            # return false, print that a use is occupying that space
+            # else return true 
+        
 def place_piece(user_piece, user_row, user_col, board):
-    # if legal_move():
-    if user_col == 1:
-        board[user_row - 1][0] = " " + user_piece + " "
-    elif user_col % 2 == 0:
-        board[user_row - 1][user_col + 1] = " " + user_piece + " "
-    else:
-        board[user_row - 1][user_col + 1] = " " + user_piece + " "
+    row = int(user_row)
+    col = board[0].index("  " + user_col.upper() + "  ")
+    if legal_move():
+        board[row][col] = " " + user_piece + " "
     return board
 
 
 board_list = create_board(BOARD_SIZE)
+print(board_list)
+print(board_list[1].index("1 "))
 #draw_board(board_list)
 user_piece = 'X'
-user_row = 3
-user_col = 5
+user_row = "4"
+user_col = "A"
 place_piece(user_piece, user_row, user_col, board_list)
 draw_board(board_list)
