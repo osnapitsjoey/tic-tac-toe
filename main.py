@@ -1,30 +1,31 @@
 
-from gameboard import GameBoard
+BOARD_SIZE = 3
 
-game_board: GameBoard = GameBoard()       # 👈 this creates an INSTANCE of the class
 
-# when game_start:
-#     draw_board
-#     ask_user = input(play against you or ai?)
-#     if ask_user is ai:
-#       initiate ai
-#     else:
-#       play with two players
-#     if check_winner():
-#        show winner and show winning board or show draw
-#     else:
-#       ask player 1 for move
-#           if move_is_legal:
-#               ask/have ai move player 2
-#                   if move_is_legal:
-#                       update board
-#     next turn
+def create_board(board_size):
 
-# board_size = 5
-# board = []
-# for num in range(board_size):
-#     board.append(" ")
-# board = [board] * board_size
-# print(board)
+    """
+    Create a tic-tac-toe board with the specified size.
 
-game_board.draw_board()
+    Args:
+        board_size (int): The size of the board (number of rows and columns).
+
+    Returns:
+        list: A 2D list representing the game board, where each cell is initialized to "-".
+    """
+
+    board = []
+    for _ in range(board_size):
+        row = []
+        for col in range(board_size * 2 - 1): # doubles the size of grid to accommodate spacers, and stops one short of adding a third spacer
+            if col % 2 == 0: # checks if dividing the current index of col is zero, if true places a '-', if false, adds a '|'
+                row.append("-") # playable space
+            else:
+                row.append("|") # spacer
+        board.append(row) # builds the row up until it finishes the for loops, starting the row list over again
+
+    return board
+
+
+board_coords = create_board(BOARD_SIZE)
+print(board_coords)
