@@ -1,5 +1,5 @@
 from string import ascii_uppercase
-BOARD_SIZE = 5
+BOARD_SIZE = 3
 
 # Game Board
 def create_board(board_size) -> list:
@@ -51,13 +51,18 @@ def draw_board(board) -> str:
 
 # Game Logic
 
-def legal_move(user_row, user_col, board, user_piece):
+def legal_move(user_piece, user_row, user_col, board):
+    """Takes the user inputted string for the chosen row and column, and checks to make sure the move is legal.
+    Returns: Boolean"""
     row = int(user_row)
-    col = board[0].index("  " + user_col.upper() + "  ") # Confirm user_col matches the format in board[0]
-    if row < 0 or row >= len(board) or col not in board[0]:
+    col_string = "  " + user_col.upper() + "  " 
+    if row < 0 or row >= len(board) or col_string not in board[0] : # change
         print('Your move is out of the playable bounds. Please input a valid placement.')
         return False
-    elif board[row][col] == ' O ' or board[row][col] == ' X ':
+    
+    col = board[0].index(col_string)
+
+    if board[row][col] == ' O ' or board[row][col] == ' X ':
         user_piece = " " + user_piece + " "
         if board[row][col] == user_piece:
             print('You already have a piece there.\n')
@@ -76,14 +81,28 @@ def place_piece(user_piece, user_row, user_col, board):
         board[row][col] = " " + user_piece.upper() + " "
     return board
 
+def game_state():
+    gam
+    # if 1a is full:
+    #   for spot in range(board):
+    #       check row[-1]col[-1]
+    #       if '  X  ' or '  O  ':
+    #           
+    pass
 
-board_list = create_board(BOARD_SIZE)
-print(board_list)
-print(board_list[1].index("1 "))
 
+
+
+board_list = create_board(board_size=BOARD_SIZE)
+for spot in board_list[::-1]:
+    print(board_list.index(spot), spot)    
 user_piece = 'X'
-user_row = "4"
-user_col = "A"
-#legal_move(user_row, user_col, board_list, user_piece)
-place_piece(user_piece, user_row, user_col, board_list)
-draw_board(board_list)
+user_row = "3"
+user_col = "B"
+
+is_legal = legal_move(user_piece, user_row, user_col, board=board_list)
+if is_legal: 
+    place_piece(user_piece, user_row="1", user_col="a", board=board_list)
+    place_piece(user_piece, user_row="2", user_col="b", board=board_list)
+    place_piece(user_piece, user_row="3", user_col="C", board=board_list)
+draw_board(board=board_list)
