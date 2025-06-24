@@ -16,13 +16,13 @@ def create_board(board_size) -> list:
     letter_grid = []
     board = []
 
-    for _ in range(board_size):
+    for i in range(board_size):
         row = []
         for col in range(
             board_size * 2 - 1
         ):  # doubles the size of grid to accommodate spacers, and stops one short of adding a third spacer
             if len(row) == 0: # if start of row, insert index + 1 (to not start at zero), along with a space for better visual
-                row.append(str(_ + 1) + " ")
+                row.append(str(i + 1) + " ")
             if (
                 col % 2 == 0
             ):  # checks if dividing the current index of col is zero, if true places a '-', if false, adds a '|'
@@ -51,29 +51,39 @@ def draw_board(board) -> str:
 
 # Game Logic
 
-def legal_move(user_move, user_row, user_col, board):
+def legal_move(user_row, user_col, board, user_piece):
     row = int(user_row)
-    col = board[0].index("  " + user_col.upper() + "  ")
-    if row < 0 or row >= len(board) - 1 or col not in board[0]:
-        # return false and print out a message saying invalid move
-            # if ' X ' or ' O ' in board[row][col]:
-            # return false, print that a use is occupying that space
-            # else return true 
+    col = board[0].index("  " + user_col.upper() + "  ") # Confirm user_col matches the format in board[0]
+    if row < 0 or row >= len(board) or col not in board[0]:
+        print('Your move is out of the playable bounds. Please input a valid placement.')
+        return False
+    elif board[row][col] == ' O ' or board[row][col] == ' X ':
+        user_piece = " " + user_piece + " "
+        if board[row][col] == user_piece:
+            print('You already have a piece there.\n')
+            return False
+        else:
+            print("You can't place a piece over your opponents.\n")
+            return False
+    else:
+        return True
+
         
 def place_piece(user_piece, user_row, user_col, board):
     row = int(user_row)
     col = board[0].index("  " + user_col.upper() + "  ")
-    if legal_move():
-        board[row][col] = " " + user_piece + " "
+    if True:
+        board[row][col] = " " + user_piece.upper() + " "
     return board
 
 
 board_list = create_board(BOARD_SIZE)
 print(board_list)
 print(board_list[1].index("1 "))
-#draw_board(board_list)
+
 user_piece = 'X'
 user_row = "4"
 user_col = "A"
+#legal_move(user_row, user_col, board_list, user_piece)
 place_piece(user_piece, user_row, user_col, board_list)
 draw_board(board_list)
