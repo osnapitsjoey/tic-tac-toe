@@ -39,7 +39,7 @@ def create_board(board_size) -> list:
     board.insert(0, letter_grid)
     return board
 
-def draw_board(board) -> str:
+def draw_board(board):
     """Displays the game board as characters aesthetically"""
     string = ''
     for row in board:
@@ -81,28 +81,59 @@ def place_piece(user_piece, user_row, user_col, board):
         board[row][col] = " " + user_piece.upper() + " "
     return board
 
-def game_state():
-    gam
-    # if 1a is full:
-    #   for spot in range(board):
-    #       check row[-1]col[-1]
-    #       if '  X  ' or '  O  ':
-    #           
-    pass
+def game_state(board, player_one, player_two):
+    row_win = []
+
+
+    for row in board:
+        for piece in row:
+            if piece.strip() == player_one:
+                row_win.append(
+                    piece.strip()
+                )  # strip white space from piece to equal player input
+            elif piece.strip() == player_two:
+                row_win.append(
+                    piece.strip()
+                )  # strip white space from piece to equal player input
+        if len(row_win) == len(row) // 2:
+            if row_win.count(player_one) == len(row) // 2:
+                print(f"TESTING: {player_one} wins horizontally!")
+            elif row_win.count(player_two) == len(row) // 2:
+                print(f"TESTING: {player_two} wins horizontally!")
+        row_win = []
 
 
 
 
-board_list = create_board(board_size=BOARD_SIZE)
-for spot in board_list[::-1]:
-    print(board_list.index(spot), spot)    
+
+board_list = create_board(board_size=BOARD_SIZE)  
 user_piece = 'X'
 user_row = "3"
 user_col = "B"
 
-is_legal = legal_move(user_piece, user_row, user_col, board=board_list)
+playable_pieces = ['X', 'O']
+
+while True:
+    user_one_piece = input("Would you like to be (X)'s or (O)'s?: ").upper()
+    if user_one_piece in playable_pieces:
+        break
+    else:
+        print("Invalid choice. Please enter 'X' or 'O'.")
+
+if user_one_piece == 'X':
+    user_two_piece = 'O'
+else:
+    user_two_piece = 'X'
+
+is_legal = legal_move(user_one_piece, user_row, user_col, board=board_list)
 if is_legal: 
-    place_piece(user_piece, user_row="1", user_col="a", board=board_list)
-    place_piece(user_piece, user_row="2", user_col="b", board=board_list)
-    place_piece(user_piece, user_row="3", user_col="C", board=board_list)
+    place_piece(user_piece=user_one_piece, user_row="3", user_col="a", board=board_list)
+    place_piece(user_piece=user_one_piece, user_row="3", user_col="b", board=board_list)
+    place_piece(user_piece=user_one_piece, user_row="3", user_col="C", board=board_list)
+    place_piece(user_piece=user_two_piece, user_row="2", user_col="B", board=board_list)
+    game_state(board = board_list, player_one = user_one_piece, player_two = user_two_piece)
 draw_board(board=board_list)
+
+
+
+    # if row_win 
