@@ -81,11 +81,22 @@ def place_piece(user_piece, user_row, user_col, board):
         board[row][col] = " " + user_piece.upper() + " "
     return board
 
-def game_state(board, player_one, player_two):
-    row_win = []
 
+
+# Refactor this to seperate functions to keep it more readable
+#also, include this genius check for horizontal to shorten the code by 20 lines:     
+# for row in board:
+    #if all(piece.strip() == player for piece in row):
+        #return True
+    #return False
+def game_state(board, player_one, player_two):
+    """A Function that checks if there is a win via horizontal, vertical, or diagonal wins"""
+    row_win = []
+    vertical_win = []
 
     for row in board:
+
+        # check for horizontal wins
         for piece in row:
             if piece.strip() == player_one:
                 row_win.append(
@@ -98,9 +109,19 @@ def game_state(board, player_one, player_two):
         if len(row_win) == len(row) // 2:
             if row_win.count(player_one) == len(row) // 2:
                 print(f"TESTING: {player_one} wins horizontally!")
+                return True
             elif row_win.count(player_two) == len(row) // 2:
                 print(f"TESTING: {player_two} wins horizontally!")
+                return True
+
+        
         row_win = []
+        
+        # Check for vertical wins
+        # if row != []:
+
+
+    return False
 
 
 
@@ -125,7 +146,7 @@ if user_one_piece == 'X':
 else:
     user_two_piece = 'X'
 
-is_legal = legal_move(user_one_piece, user_row, user_col, board=board_list)
+is_legal = legal_move(user_piece=user_one_piece, user_row = user_row, user_col = user_col, board=board_list)
 if is_legal: 
     place_piece(user_piece=user_one_piece, user_row="3", user_col="a", board=board_list)
     place_piece(user_piece=user_one_piece, user_row="3", user_col="b", board=board_list)
@@ -136,4 +157,11 @@ draw_board(board=board_list)
 
 
 
-    # if row_win 
+vert_win = []
+
+target_index = 0
+for spaces in range(len(board_list[0])):
+    if board_list != []:
+        vert_win.append(board_list[target_index])
+        target_index += 1
+    print(vert_win)
