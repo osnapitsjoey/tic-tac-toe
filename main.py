@@ -1,5 +1,7 @@
 from string import ascii_uppercase
+
 BOARD_SIZE = 3
+playable_pieces = ["X", "O"]
 
 # Game Board
 def create_board(board_size) -> list:
@@ -83,85 +85,64 @@ def place_piece(user_piece, user_row, user_col, board):
 
 
 
-# Refactor this to seperate functions to keep it more readable
-#also, include this genius check for horizontal to shorten the code by 20 lines:     
-# for row in board:
-    #if all(piece.strip() == player for piece in row):
-        #return True
-    #return False
-def game_state(board, player_one, player_two):
-    """A Function that checks if there is a win via horizontal, vertical, or diagonal wins"""
-    row_win = []
-    vertical_win = []
+# win checks
 
-    for row in board:
-
-        # check for horizontal wins
-        for piece in row:
-            if piece.strip() == player_one:
-                row_win.append(
-                    piece.strip()
-                )  # strip white space from piece to equal player input
-            elif piece.strip() == player_two:
-                row_win.append(
-                    piece.strip()
-                )  # strip white space from piece to equal player input
-        if len(row_win) == len(row) // 2:
-            if row_win.count(player_one) == len(row) // 2:
-                print(f"TESTING: {player_one} wins horizontally!")
-                return True
-            elif row_win.count(player_two) == len(row) // 2:
-                print(f"TESTING: {player_two} wins horizontally!")
-                return True
-
-        
-        row_win = []
-        
-        # Check for vertical wins
-        # if row != []:
-
-
+def game_state(board, player):
+    if horizontal_win(board, player):
+        return True
+    if vertical_win(board, player):
+        return True
     return False
 
 
 
+def horizontal_win(board, player):
+    board = [piece.strip() for piece in board if piece == 'X' or piece == 'O']
+    print(board)
+    for row in board:
+        if all(piece.strip() for piece in row):
+            print(f"{player}'s has won horizontally!\n")
+            return True
+    return False
+
+def vertical_win(board, player):
+    for col in range(len(board[0])):  # Loop over each column
+        vert_win = []  # Reset the vertical win tracker for this column
+        for row in range(len(board)):  # Loop through each row for the current column
+            vert_win.append(board[row][col])  # Collect the pieces in the column  
+        del vert_win[0]
+        # Now check if all items in vert_win are the same
+        if all(spot.strip() == "X" for spot in vert_win):  # Check for 'X'
+            print(f"{player} wins vertically!")
+            return True
+        elif all(spot.strip() == "O" for spot in vert_win):  # Check for 'O'
+            print(f"{player} wins vertically!")
+            return True
+
+    return False  # No vertical win found
 
 
 board_list = create_board(board_size=BOARD_SIZE)  
-user_piece = 'X'
-user_row = "3"
-user_col = "B"
 
-playable_pieces = ['X', 'O']
 
 while True:
-    user_one_piece = input("Would you like to be (X)'s or (O)'s?: ").upper()
-    if user_one_piece in playable_pieces:
+    player_one = input("Would you like to be (X)'s or (O)'s?: ").upper()
+    if player_one in playable_pieces:
         break
     else:
         print("Invalid choice. Please enter 'X' or 'O'.")
 
-if user_one_piece == 'X':
-    user_two_piece = 'O'
+if player_one == 'X':
+    player_two = 'O'
 else:
-    user_two_piece = 'X'
+    player_two = 'X'
 
-is_legal = legal_move(user_piece=user_one_piece, user_row = user_row, user_col = user_col, board=board_list)
+is_legal = legal_move(user_piece=player_one, user_row = user_row, user_col = user_col, board=board_list)
 if is_legal: 
-    place_piece(user_piece=user_one_piece, user_row="3", user_col="a", board=board_list)
-    place_piece(user_piece=user_one_piece, user_row="3", user_col="b", board=board_list)
-    place_piece(user_piece=user_one_piece, user_row="3", user_col="C", board=board_list)
-    place_piece(user_piece=user_two_piece, user_row="2", user_col="B", board=board_list)
-    game_state(board = board_list, player_one = user_one_piece, player_two = user_two_piece)
+    place_piece(user_piece=player_one, user_row="3", user_col="a", board=board_list)
+    place_piece(user_piece=player_two, user_row="3", user_col="b", board=board_list)
+    place_piece(user_piece=player_two, user_row="1", user_col="B", board=board_list)
+    place_piece(user_piece=player_two, user_row="2", user_col="B", board=board_list)
+    game_state(board = board_list, player=player_one)
 draw_board(board=board_list)
 
-
-
-vert_win = []
-
-target_index = 0
-for spaces in range(len(board_list[0])):
-    if board_list != []:
-        vert_win.append(board_list[target_index])
-        target_index += 1
-    print(vert_win)
