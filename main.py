@@ -4,7 +4,7 @@ BOARD_SIZE = 3
 playable_pieces = ["X", "O"]
 
 # Game Board
-def create_board(board_size) -> list:
+def create_board(board_size):
 
     """
     Create a tic-tac-toe board with the specified size, with grid lines and an index table.
@@ -97,13 +97,15 @@ def game_state(board, player):
 
 
 def horizontal_win(board, player):
-    board = [piece.strip() for piece in board if piece == 'X' or piece == 'O']
-    print(board)
-    for row in board:
-        if all(piece.strip() for piece in row):
-            print(f"{player}'s has won horizontally!\n")
+    symbol = " " + player.upper() + " "
+    for row in board[1:]:  # Skip the letter row at index 0
+        # Check only the cells, not the spacers (index 1, 3, 5...)
+        player_cells = [row[i] for i in range(1, len(row), 2)]
+        if all(cell == symbol for cell in player_cells):
+            print(f"{player} has won horizontally!")
             return True
     return False
+
 
 def vertical_win(board, player):
     for col in range(len(board[0])):  # Loop over each column
@@ -122,27 +124,55 @@ def vertical_win(board, player):
     return False  # No vertical win found
 
 
-board_list = create_board(board_size=BOARD_SIZE)  
 
 
-while True:
-    player_one = input("Would you like to be (X)'s or (O)'s?: ").upper()
-    if player_one in playable_pieces:
-        break
+def tic_tac_toe():
+    board_list = create_board(board_size=BOARD_SIZE)  
+    initialize_game = input("Would you like to play Tic Tac Toe? (Y)es, (N)o: ").upper()
+
+    if initialize_game.startswith('Y'):
+        draw_board(board=board_list)
+        initialize_game = True
     else:
-        print("Invalid choice. Please enter 'X' or 'O'.")
+        initialize_game = False
 
-if player_one == 'X':
-    player_two = 'O'
-else:
-    player_two = 'X'
+    while initialize_game:
+        turns_in_game = 0
 
-is_legal = legal_move(user_piece=player_one, user_row = user_row, user_col = user_col, board=board_list)
-if is_legal: 
-    place_piece(user_piece=player_one, user_row="3", user_col="a", board=board_list)
-    place_piece(user_piece=player_two, user_row="3", user_col="b", board=board_list)
-    place_piece(user_piece=player_two, user_row="1", user_col="B", board=board_list)
-    place_piece(user_piece=player_two, user_row="2", user_col="B", board=board_list)
-    game_state(board = board_list, player=player_one)
-draw_board(board=board_list)
+        while True:
+            player_one = input("Would you like to be (X)'s or (O)'s?: ").upper()
+            if player_one in playable_pieces:
+                break
+            else:
+                print("Invalid choice. Please enter 'X' or 'O'.")
+
+        if player_one == 'X':
+            player_two = 'O'
+        else:
+            player_two = 'X'
+
+        for turn in range(BOARD_SIZE * BOARD_SIZE):
+            if turns_in_game == 0:
+                player = player_one
+            if turns_in_game % 2 == 0:
+                player = player_one
+            else:
+                player = player_two
+
+            col = input(f"player '{player}', what column would you like to place your piece in?: ").upper()
+            row = input("what row would you like to choose?: ").upper()
+            is_legal = legal_move(user_piece=player, user_row = row, user_col = col, board=board_list)
+            if is_legal: 
+                place_piece(user_piece=player, user_row=row, user_col=col, board=board_list)
+                game_over = game_state(board = board_list, player=player)
+                if game_over:
+                    break
+                
+            turns_in_game += 1
+            draw_board(board=board_list)
+            if turns_in_game == BOARD_SIZE * BOARD_SIZE:
+                print('No winner!')
+                break
+
+tic_tac_toe()
 
