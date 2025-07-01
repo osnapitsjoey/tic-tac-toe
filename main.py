@@ -87,9 +87,9 @@ def legal_move(user_piece, user_row, user_col, board):
 
 def place_piece(user_piece, user_row, user_col, board):
     row = int(user_row)
-    col = board[0].index("  " + user_col.upper() + "  ")
+    col = board[0].index("  " + user_col.upper() + "  ") # adds spaces to reflect how the board is actually storing the variables
     if True:
-        board[row][col] = " " + user_piece.upper() + " "
+        board[row][col] = " " + user_piece.upper() + " " 
     return board
 
 
@@ -118,24 +118,17 @@ def horizontal_win(board, player):
 
 
 def vertical_win(board, player):
-    for col in range(len(board[0])):  # Loop over each column
-        vert_win = []  # Reset the vertical win tracker for this column
-        for row in range(len(board)):  # Loop through each row for the current column
-            vert_win.append(board[row][col])  # Collect the pieces in the column
-        del vert_win[0]
-        # Now check if all items in vert_win are the same
-        if all(spot.strip() == "X" for spot in vert_win):  # Check for 'X'
-            os.system("cls||clear")
-            print(f"{player} wins vertically!")
-            draw_board(board)
-            return True
-        elif all(spot.strip() == "O" for spot in vert_win):  # Check for 'O'
+    symbol = " " + player.upper() + " "
+    # Iterate only over the playable columns (1, 3, 5, ...)
+    for col in range(1, len(board[1]), 2):
+        player_cells = [row[col] for row in board[1:]]  # Skip index 0 (headers)
+        if all(cell == symbol for cell in player_cells):
             os.system("cls||clear")
             draw_board(board)
             print(f"{player} wins vertically!")
             return True
+    return False
 
-    return False  # No vertical win found
 
 
 def tic_tac_toe():
@@ -144,6 +137,10 @@ def tic_tac_toe():
     initialize_game = input("Would you like to play Tic Tac Toe? (Y)es, (N)o: ").upper()
     os.system("cls||clear")
 
+    # if initialize_game == "SECRET":
+    #     change_game_size = input(f"{'~' * 5}Welcome to the secret menu{'~' * 5}\n\nEnter a number to select a board size")
+    #     if isinstance(change_game_size, int): 
+    #         BOARD_SIZE = change_game_size
     if initialize_game.startswith("Y"):
         draw_board(board=board_list)
         initialize_game = True
