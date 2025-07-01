@@ -140,6 +140,7 @@ def vertical_win(board, player):
 
 def tic_tac_toe():
     board_list = create_board(board_size=BOARD_SIZE)
+    letters_on_board = [letter.strip(" ") for letter in board_list[0] if letter.strip(" ") in ascii_uppercase and letter.strip() != ""]
     initialize_game = input("Would you like to play Tic Tac Toe? (Y)es, (N)o: ").upper()
     os.system("cls||clear")
 
@@ -171,14 +172,21 @@ def tic_tac_toe():
                 player = player_one
             else:
                 player = player_two
+            while True:
+                col = input(
+                    f"player '{player}', what column would you like to place your piece in?: "
+                ).upper()
 
-            col = input(
-                f"player '{player}', what column would you like to place your piece in?: "
-            ).upper()
-            row = input("what row would you like to choose?: ").upper()
-            is_legal = legal_move(
-                user_piece=player, user_row=row, user_col=col, board=board_list
-            )
+                if col in letters_on_board:
+                    row = input("what row would you like to choose?: ").upper()
+                    if len(row) == 1:
+                                        
+                        is_legal = legal_move(
+                            user_piece=player, user_row=row, user_col=col, board=board_list
+                        )
+                        break
+                else:
+                    print(f"{col} is not a valid column. Please choose again.")
             if is_legal:
                 place_piece(
                     user_piece=player, user_row=row, user_col=col, board=board_list
